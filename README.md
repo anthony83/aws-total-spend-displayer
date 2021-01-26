@@ -1,5 +1,5 @@
 <h1>aws-total-spend-displayer</h1>
-<p>Sime script tp output AWS Month-to-Date Spend Total to console</p>
+<p>Simple script to output AWS Month-to-Date Spend Total to console</p>
 <p>Before running ensure the following has been installed onto your machine:</p>
 <ul>
 <li>AWS CLI (and configured against your AWS account, with your keys etc..)</li>
