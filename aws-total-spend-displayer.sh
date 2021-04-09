@@ -17,7 +17,10 @@ aws_billing_ammount_monthy=$(aws ce get-cost-and-usage \
 			--output text | sort -r -k 3 | head -n 1 | cut -f 2)
 
 # Use free.currconv.com API to retrieve conversion from USD to AUD - FREE API key required, and added some transformation to obtain rate value
-conversion_value_usd_to_aud=$(curl -s -X GET 'https://free.currconv.com/api/v7/convert?q=USD_AUD&compact=ultra&apiKey=<API_TOKEN>' 2>&1 | sed -E 's/.*"USD_AUD":"?([^,"]*)"?.*/\1/' | sed 's/}//' )
+conversion_value_usd_to_aud=$(curl -s\
+			-X GET 'https://free.currconv.com/api/v7/convert?q=USD_AUD&compact=ultra&apiKey=<API-KEY>' 2>&1\
+			| sed -E 's/.*"USD_AUD":"?([^,"]*)"?.*/\1/' \
+			| sed 's/}//' )
 
 # Multiply Monthly Spend total AUD into US Dollar 
 total=$(expr $aws_billing_ammount_monthy*$conversion_value_usd_to_aud | bc)
