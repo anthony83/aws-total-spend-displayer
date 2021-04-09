@@ -1,13 +1,15 @@
 #!/usr/bin/bash
 
 # Simple script to fetch AWS Month-to-Date spend and print it out in AUD 
-
 # Capture Month-to-Date Spend Total using AWS CLI
 
+# set the initial maximum spend value
 max=1
 
+# print out the max spend value
 echo "AWS Max Spend is $max dollars"
 
+# check the billing monthly amount via aws cli
 aws_billing_ammount_monthy=$(aws ce get-cost-and-usage \
 			--time-period Start=$(date -u -d "$TODAY" '+%Y-%m-01'),End=$(date -u +"%Y-%m-%d" --date="+1 day") \
 			--granularity MONTHLY \
@@ -23,13 +25,19 @@ total=$(expr $aws_billing_ammount_monthy*$conversion_value_usd_to_aud | bc)
 # print the total in AUD
 echo -e "AWS Monthly Total Spend is (AUD): " $total
 
+#capture date for use with csv export
 date=$(date +"%d-%m-%Y-%H:%M")
+
 #echo "Todays Date:" $date "AWS Total Cost:" $total >> aws-total-spend.csv
 convert=$(echo "Date" $date "Cost" $total)
+
 # echo "Date" "Time"  | sed -E 's/ +/,/g' > aws-total-spend.csv -- work in progress for headers later
 echo $convert | sed -E 's/ +/,/g' >> aws-total-spend.csv
 
+# convert the total into a integer so that it can be used for if statement below
 totaltoint=${total%%.*}
+
+# set text to red for when spend is above max
 RED='\033[0;31m'
 
 if  [[ "$totaltoint" -gt "$max" ]];
